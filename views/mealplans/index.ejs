@@ -1,0 +1,15 @@
+<%- include('../partials/header') %> 
+
+<nav>
+  <h1>Your meal plans</h1>
+</nav>
+<a href="/mealplans/new">Create a meal plan</a>
+<%if(!mealplans.length){%>
+  <br><h3>No Meal plans yet </h3>
+<%} else {%>
+  <h3>here is a meal plan</h3>
+<%}%>
+
+
+
+<%- include('../partials/footer') %> 

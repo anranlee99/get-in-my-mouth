@@ -1,0 +1,150 @@
+<%- include('../partials/header') %> 
+
+<!-- display a weekly table -->
+<h1>Meal Plan</h1>
+<button class="trigger">Click me to create a meal!</button><br>
+<div class="modal">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <form action="/mealplans" method="POST">
+            <br>
+            <label>Event:
+                <div class="event" name="event">
+                    <textarea class="eventph" rows="5" 
+                    placeholder="brunch, dinner, snack, etc"></textarea>
+               </div> 
+               <br><br><br>
+            </label>
+            <label>Start Time:
+                <select name="startHour">
+                    <%for(let j = 1; j < 13; j++){%>
+                        <%if(j<10){%>
+                            <option value="<%=`0${j}`%>"><%=`0${j}`%></option>
+                        <%} else {%>
+                            <option value="<%=`${j}`%>"><%=`${j}`%></option>                    
+                        <%} %>
+                        
+                    <%}%>
+                 </select>  
+                 :
+                 <select name="startMin">
+                    <%for(let i = 0; i < 4; i++){%>
+                        <%if(i===0){%>
+                            <option value="00">00</option>
+                        <%} else {%>
+                            <option value="<%=`${i*15}`%>"><%=`${i*15}`%></option>                    
+                        <%} %>
+                        
+                    <%}%>
+                 </select>    
+                 <select name="startAMPM">
+                    <option value="AM">AM</option>
+                    <option value="PM">PM</option>
+                 </select>   
+            </label><br><br>
+            <label>End Time:
+                <select name="endHour">
+                    <%for(let j = 1; j < 13; j++){%>
+                        <%if(j<10){%>
+                            <option value="<%=`0${j}`%>"><%=`0${j}`%></option>
+                        <%} else {%>
+                            <option value="<%=`${j}`%>"><%=`${j}`%></option>                    
+                        <%} %>
+                        
+                    <%}%>
+                 </select>  
+                 :
+                 <select name="endMin">
+                    <%for(let i = 0; i < 4; i++){%>
+                        <%if(i===0){%>
+                            <option value="00">00</option>
+                        <%} else {%>
+                            <option value="<%=`${i*15}`%>"><%=`${i*15}`%></option>                    
+                        <%} %>
+                        
+                    <%}%>
+                 </select>    
+                 <select name="endAMPM">
+                    <option value="AM">AM</option>
+                    <option value="PM">PM</option>
+                 </select>   
+            </label><br><br>
+            <label>Description:
+                <div class="description" name="description">
+                    <textarea class="descriptionph" rows="5" 
+                    placeholder="Ex: Just a snack&#x1f608; Salad for Lunch&#x1f60e; &#10;or leave me empty :)"></textarea>
+               </div>  <br><br><br><br>
+            </label>
+            <input type="submit" value="Add Meal">
+        </form>
+    </div>
+</div>
+<div class="tablewrapper">
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Sunday</th>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+                <th>Saturday</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%for(let i = 0; i < 2; i++){%>
+                <%for(let j = 0; j < 12; j++){%>
+                    <%for(let k = 0; k < 4; k++){%>
+                        <tr>
+                            <td>
+                                <%let str%>
+                                <%if(j<10){%>
+                                    <%if(j===0){%>
+                                        <% str = '12'%>
+                                    <%} else {%>
+                                        <%str = `0${j}`%>
+                                <%}} else {%>
+                                    <%str = `${j}`%>
+                                <%} %>
+                                <% str += ':' %>
+                                <%if(k===0){%>
+                                    <%str += '00'%>
+                                <%} else {%>
+                                    <%str += `${k*15}`%>        
+                                <%} %>
+                                <%if(i===0){%>
+                                <%str += 'AM'%>
+                                <% } else { %>
+                                    <%str += 'PM'%>
+                                <%}%>
+                                <%=str%>
+                            </td>
+                        </tr>
+                        <%}}}%>
+                    
+        </tbody>
+    </table>
+
+</div>
+<script>
+const modal = document.querySelector(".modal");
+const trigger = document.querySelector(".trigger");
+const closeButton = document.querySelector(".close-button");
+
+function toggleModal() {
+    modal.classList.toggle("show-modal");
+}
+
+function windowOnClick(event) {
+    if (event.target === modal) {
+        toggleModal();
+    }
+}
+
+trigger.addEventListener("click", toggleModal);
+closeButton.addEventListener("click", toggleModal);
+window.addEventListener("click", windowOnClick);
+</script>
+<%- include('../partials/footer') %> 
