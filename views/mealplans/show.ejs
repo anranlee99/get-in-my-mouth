@@ -76,6 +76,16 @@
                     &#x1f60e; &#10;or leave me empty :)" name="description"></textarea>
                </div>  <br><br><br><br>
             </label>
+            <label>Days of the Week:
+                <br>
+                <input type="checkbox" name="Sunday" value="Sunday">Su
+                <input type="checkbox" name="Monday" value="Monday">M
+                <input type="checkbox" name="Tuesday" value="Tuesday">T
+                <input type="checkbox" name="Wednesday" value="Wednesday">W
+                <input type="checkbox" name="Thursday" value="Thursday">Th
+                <input type="checkbox" name="Friday" value="Friday">F
+                <input type="checkbox" name="Saturday" value="Saturday">Sa
+            </label>
             <input type="submit" value="Add Meal">
         </form>
     </div>
@@ -122,13 +132,37 @@
                                 <%}%>
                                 <%=str%>
                             </td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <%daysEnum.forEach(function(dayOfWeek){ %>
+                                <%let currTime%>
+                                <%let classes = ''%>
+                                <%if(i===1){%>
+                                    <%currTime = j + 12%>
+                                    <%if(k*15===0){%>
+                                        <%currTime += '00'%>
+                                    <%} else {%>
+                                        <%currTime += `${k*15}`%>
+                                    <%}%>
+                                    <%classes = `${dayOfWeek} ${currTime} PM`%>
+                                <%} else {%>
+                                    <%if(j<10){%>
+                                        <%if(!j){%>
+                                            <%currTime = '12'%>
+                                        <%} else {%>
+                                            <%currTime = '0' + j%>
+                                        <%}%>
+                                    <%} else {%>
+                                        <%currTime = j%>
+                                    <%}%>
+                                    
+                                    <%if(k*15===0){%>
+                                        <%currTime += '00'%>
+                                    <%} else {%>
+                                        <%currTime += `${k*15}`%>
+                                    <%}%>
+                                    <%classes = `${dayOfWeek} ${currTime} AM`%>
+                                <%}%>
+                                <td class="<%=classes%>"></td>
+                            <%})%>
                         </tr>
                         
                         <%}}}%>
@@ -156,5 +190,7 @@ function windowOnClick(event) {
 trigger.addEventListener("click", toggleModal);
 closeButton.addEventListener("click", toggleModal);
 window.addEventListener("click", windowOnClick);
+
+
 </script>
 <%- include('../partials/footer') %> 

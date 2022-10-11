@@ -6,6 +6,7 @@ const mealSchema = new Schema({
     startTime: String,
     endTime: String,
     description: String,
+    days: [String],
     mealPlan: {type: Schema.Types.ObjectId, ref: 'mealPlan', required: true }
 
 }, {

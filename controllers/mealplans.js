@@ -19,14 +19,18 @@ function index(req, res) {
 
 
 function show(req, res){
-  console.log('in mealplans show')
   MealPlan.findById(req.params.id, function(err, mealplan) {
     if(err){
       console.log('err:', err)
-    } else {
-      console.log('no error, mealplan:', mealplan)
-    }
-    res.render('mealplans/show', { title: `${mealplan.title}`, mealplan });
+    } 
+    Meal.find({mealPlan:req.params.id}, function(err, meals){
+      res.render('mealplans/show', { 
+        title: `${mealplan.title}`,
+         mealplan,
+         meals,
+         daysEnum: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+        });
+    })
   });
 }
 
