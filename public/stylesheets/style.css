@@ -62,7 +62,17 @@ main{
   height: 25rem;
   border-radius: 0.5rem;
 }
-
+.modal-newplan{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 1rem 1.5rem;
+  width: 20rem;
+  height: 10rem;
+  border-radius: 0.5rem;
+}
 .close-button {
   float: right;
   width: 1.5rem;
@@ -100,6 +110,7 @@ main{
   display: flex;
   justify-content: center;
   align-items: center;
+  border: 1px solid black;
   
 }
 
@@ -107,6 +118,10 @@ table, td, tr, th {
   border-collapse: collapse;
   border: 1px solid black;
 }
+tr{
+  text-align: center;
+}
 table{
   margin: auto;
+  width: 100%
 }

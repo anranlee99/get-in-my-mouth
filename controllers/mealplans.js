@@ -3,28 +3,41 @@ const Meal = require('../models/meal')
 
 module.exports = {
     index,
-    // show,
-    new: newMealplan,
+    show,
     create
   };
 
 
 function index(req, res) {
     MealPlan.find({}, function(err, mealplans) {
+
       res.render('mealplans', { title: 'Meal Plans', mealplans });
     });
     
   }
 
-function newMealplan(req, res){
-  res.render('mealplans/new',{title: 'New Meal Plan'})
+
+
+function show(req, res){
+  console.log('in mealplans show')
+  MealPlan.findById(req.params.id, function(err, mealplan) {
+    if(err){
+      console.log('err:', err)
+    } else {
+      console.log('no error, mealplan:', mealplan)
+    }
+    res.render('mealplans/show', { title: `${mealplan.title}`, mealplan });
+  });
 }
 
 function create(req, res) {
-  const meal = new Meal(req.body);
-  meal.save(function(err) {
+  console.log('create function called')
+  
+  req.body.user = req.user._id;
+  const mealplan = new MealPlan(req.body);
+  mealplan.save(function(err) {
     // one way to handle errors
-    if (err) return res.redirect('/mealplans/new');
+    if (err) return res.redirect('/mealplans');
     // for now, redirect right back to new.ejs
     res.redirect(`/mealplans`);
   });

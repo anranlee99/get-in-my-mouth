@@ -6,7 +6,7 @@ const isLoggedIn = require('../config/auth');
 
 router.get('/', isLoggedIn, mealplansCtrl.index);
 // Use isLoggedIn middleware to protect routes
-router.get('/new', isLoggedIn, mealplansCtrl.new);
+router.get('/:id', isLoggedIn, mealplansCtrl.show);
 // router.get('/:id', moviesCtrl.show);
 router.post('/', isLoggedIn, mealplansCtrl.create);
 

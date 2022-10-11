@@ -3,13 +3,51 @@
 <nav>
   <h1>Your meal plans</h1>
 </nav>
-<a href="/mealplans/new">Create a meal plan</a>
+<button class="trigger">Click me to create a mealplan !</button><br>
+<div class="modal">
+  <div class="modal-newplan">
+      <span class="close-button">&times;</span>
+      <form action="/mealplans" method="POST">
+          <br>
+          <label>Name of the Plan:
+              <div class="mealplan-title" >
+                  <textarea class="titleph" rows="5" 
+                  placeholder="Ex. work week meal plan&#128170;" name="title" required></textarea>
+             </div> 
+
+          </label>
+
+          <input type="submit" value="Add Meal">
+      </form>
+  </div>
+</div>
+
 <%if(!mealplans.length){%>
   <br><h3>No Meal plans yet </h3>
 <%} else {%>
-  <h3>here is a meal plan</h3>
-<%}%>
+  <%mealplans.forEach(function(plan){%>
+    <a href="/mealplans/<%=plan._id%>"><%=plan.title%></a>
+    <br>
+<%})}%>
 
 
-
+<script>
+  const modal = document.querySelector(".modal");
+  const trigger = document.querySelector(".trigger");
+  const closeButton = document.querySelector(".close-button");
+  
+  function toggleModal() {
+      modal.classList.toggle("show-modal");
+  }
+  
+  function windowOnClick(event) {
+      if (event.target === modal) {
+          toggleModal();
+      }
+  }
+  
+  trigger.addEventListener("click", toggleModal);
+  closeButton.addEventListener("click", toggleModal);
+  window.addEventListener("click", windowOnClick);
+  </script>
 <%- include('../partials/footer') %> 

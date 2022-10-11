@@ -1,17 +1,17 @@
 <%- include('../partials/header') %> 
 
 <!-- display a weekly table -->
-<h1>Meal Plan</h1>
+<h1><%=title%></h1>
 <button class="trigger">Click me to create a meal!</button><br>
 <div class="modal">
     <div class="modal-content">
         <span class="close-button">&times;</span>
-        <form action="/mealplans" method="POST">
+        <form action="/mealplans/<%=`${mealplan._id}`%>/meals" method="POST">
             <br>
             <label>Event:
-                <div class="event" name="event">
+                <div class="event" >
                     <textarea class="eventph" rows="5" 
-                    placeholder="brunch, dinner, snack, etc"></textarea>
+                    placeholder="brunch, dinner, snack, etc" name="event"></textarea>
                </div> 
                <br><br><br>
             </label>
@@ -70,9 +70,10 @@
                  </select>   
             </label><br><br>
             <label>Description:
-                <div class="description" name="description">
+                <div class="description" >
                     <textarea class="descriptionph" rows="5" 
-                    placeholder="Ex: Just a snack&#x1f608; Salad for Lunch&#x1f60e; &#10;or leave me empty :)"></textarea>
+                    placeholder="Ex: Just a snack&#x1f608; Salad for Lunch
+                    &#x1f60e; &#10;or leave me empty :)" name="description"></textarea>
                </div>  <br><br><br><br>
             </label>
             <input type="submit" value="Add Meal">
@@ -83,7 +84,7 @@
     <table>
         <thead>
             <tr>
-                <th></th>
+                <th>Time</th>
                 <th>Sunday</th>
                 <th>Monday</th>
                 <th>Tuesday</th>
@@ -121,13 +122,22 @@
                                 <%}%>
                                 <%=str%>
                             </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                         </tr>
+                        
                         <%}}}%>
                     
         </tbody>
     </table>
 
 </div>
+<a href="/mealplans">Back to Meal Plans</a>
 <script>
 const modal = document.querySelector(".modal");
 const trigger = document.querySelector(".trigger");
