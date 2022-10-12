@@ -2,7 +2,7 @@ body {
   /* height: 100vh; */
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   box-sizing: border-box;
-
+  background: url('../images/cafe_background.jpg');
 }
 nav {
   display: flex;
@@ -13,15 +13,18 @@ nav > a {
   text-decoration: none;
   padding: 10px;
   border-radius: 5px;
+  color: black;
 }
 
 nav > a:hover:not(.active) {
-  color: white;
+  color: black;
   background-color: #424748;
 }
-
+a, a:link, a:visited, a:active{
+  color: black;
+}
 nav > a.active {
-  color: white;
+  color: black;
   cursor: default;
 }
 .login img {
@@ -34,6 +37,9 @@ main{
   justify-content: center;
   align-items: center;
   height: 100%;
+  background-color: beige;
+  opacity: 0.9;
+  border-radius: 15px;
 }
 
 
@@ -82,6 +88,15 @@ main{
   border-radius: 0.25rem;
   background-color: lightgray;
 }
+.close-menu {
+  float: right;
+  width: 1.5rem;
+  line-height: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 0.25rem;
+  background-color: lightgray;
+}
 
 .close-button:hover {
   background-color: darkgray;
@@ -105,8 +120,9 @@ main{
 
 .tablewrapper{
   height: 800px;
+  width: auto;
   overflow-y: scroll;
-  width: 80%;
+  overflow-x: auto;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -123,5 +139,17 @@ tr{
 }
 table{
   margin: auto;
-  width: 100%
+  overflow: auto;
+    display: block;
+}
+
+.meal:hover{
+  cursor: pointer;
+}
+
+#mealdisplay{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }

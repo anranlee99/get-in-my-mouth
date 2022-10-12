@@ -3,6 +3,10 @@
 <!-- display a weekly table -->
 <h1><%=title%></h1>
 <button class="trigger">Click me to create a meal!</button><br>
+<form action="/mealplans/<%= mealplan._id %>?_method=DELETE" method="POST">
+    <button style='color: red;' type="submit">Delete This Meal Plan</button>
+  </form>
+<br>
 <div class="modal">
     <div class="modal-content">
         <span class="close-button">&times;</span>
@@ -11,7 +15,7 @@
             <label>Event:
                 <div class="event" >
                     <textarea class="eventph" rows="5" 
-                    placeholder="brunch, dinner, snack, etc" name="event"></textarea>
+                    placeholder="brunch, dinner, snack, etc" name="event" required></textarea>
                </div> 
                <br><br><br>
             </label>
@@ -39,7 +43,7 @@
                  </select>    
                  <select name="startAMPM">
                     <option value="AM">AM</option>
-                    <option value="PM">PM</option>
+                    <option value="PM" selected>PM</option>
                  </select>   
             </label><br><br>
             <label>End Time:
@@ -66,7 +70,7 @@
                  </select>    
                  <select name="endAMPM">
                     <option value="AM">AM</option>
-                    <option value="PM">PM</option>
+                    <option value="PM" selected>PM</option>
                  </select>   
             </label><br><br>
             <label>Description:
@@ -78,16 +82,23 @@
             </label>
             <label>Days of the Week:
                 <br>
-                <input type="checkbox" name="Sunday" value="Sunday">Su
-                <input type="checkbox" name="Monday" value="Monday">M
-                <input type="checkbox" name="Tuesday" value="Tuesday">T
-                <input type="checkbox" name="Wednesday" value="Wednesday">W
-                <input type="checkbox" name="Thursday" value="Thursday">Th
-                <input type="checkbox" name="Friday" value="Friday">F
-                <input type="checkbox" name="Saturday" value="Saturday">Sa
+                <input type="checkbox" name="Sunday" value="Sunday" checked>Su
+                <input type="checkbox" name="Monday" value="Monday" checked>M
+                <input type="checkbox" name="Tuesday" value="Tuesday" checked>T
+                <input type="checkbox" name="Wednesday" value="Wednesday" checked>W
+                <input type="checkbox" name="Thursday" value="Thursday" checked>Th
+                <input type="checkbox" name="Friday" value="Friday" checked>F
+                <input type="checkbox" name="Saturday" value="Saturday" checked>Sa
             </label>
             <input type="submit" value="Add Meal">
         </form>
+    </div>
+</div>
+<div class="mealinfo modal">
+    <div class="modal-content">
+        <span class="close-menu">&times;</span>
+        <div id="mealdisplay"></div>
+
     </div>
 </div>
 <div class="tablewrapper">
@@ -105,91 +116,242 @@
             </tr>
         </thead>
         <tbody>
-            <%for(let i = 0; i < 2; i++){%>
-                <%for(let j = 0; j < 12; j++){%>
-                    <%for(let k = 0; k < 4; k++){%>
-                        <tr>
-                            <td>
-                                <%let str%>
-                                <%if(j<10){%>
-                                    <%if(j===0){%>
-                                        <% str = '12'%>
-                                    <%} else {%>
-                                        <%str = `0${j}`%>
-                                <%}} else {%>
-                                    <%str = `${j}`%>
-                                <%} %>
-                                <% str += ':' %>
-                                <%if(k===0){%>
-                                    <%str += '00'%>
-                                <%} else {%>
-                                    <%str += `${k*15}`%>        
-                                <%} %>
-                                <%if(i===0){%>
-                                <%str += 'AM'%>
-                                <% } else { %>
-                                    <%str += 'PM'%>
-                                <%}%>
-                                <%=str%>
-                            </td>
-                            <%daysEnum.forEach(function(dayOfWeek){ %>
-                                <%let currTime%>
-                                <%let classes = ''%>
-                                <%if(i===1){%>
-                                    <%currTime = j + 12%>
-                                    <%if(k*15===0){%>
-                                        <%currTime += '00'%>
-                                    <%} else {%>
-                                        <%currTime += `${k*15}`%>
-                                    <%}%>
-                                    <%classes = `${dayOfWeek} ${currTime} PM`%>
-                                <%} else {%>
-                                    <%if(j<10){%>
-                                        <%if(!j){%>
-                                            <%currTime = '12'%>
-                                        <%} else {%>
-                                            <%currTime = '0' + j%>
-                                        <%}%>
-                                    <%} else {%>
-                                        <%currTime = j%>
-                                    <%}%>
-                                    
-                                    <%if(k*15===0){%>
-                                        <%currTime += '00'%>
-                                    <%} else {%>
-                                        <%currTime += `${k*15}`%>
-                                    <%}%>
-                                    <%classes = `${dayOfWeek} ${currTime} AM`%>
-                                <%}%>
-                                <td class="<%=classes%>"></td>
-                            <%})%>
-                        </tr>
+            <!-- 6-11AM -->
+            <%for(let j = 6; j < 12; j++){%>
+                <%for(let k = 0; k < 4; k++){%>
+                    <tr>
+                    <%if(j<10){%>
+                    
+                        <%if(k){%>
+                            <td ><%=`0${j}:${k*15}AM`%></td>
+                        <%}else{ %>
+                            <td ><%=`0${j}:00 AM`%></td>
+                        <%}%>
                         
-                        <%}}}%>
+                        <%daysEnum.forEach(function(dayOfWeek){ %>
+                            <%let currTime%>
+                            <%if(!k){currTime = `0${j}00`}else{currTime = `0${j}${k*15}`}%>
+                            <%let isMeal = false%>
+                            <%let putName = ''%>
+                            <%let mealID = ''%>
+                            <%meals.forEach(function(meal){%>
+                                <%meal.days.forEach(function(day){%>
+                                    
+                                    
+                                    <%if(currTime >= meal.startTime && currTime <= meal.endTime && day === dayOfWeek){%>
+                                        <%isMeal = true%>
+                                        <%mealID = meal._id%>
+                                        <%if(currTime===meal.startTime){putName = meal.event}%>
+                                    <%}%>
+                                <%})%>
+                            <%})%>
+                            <%if(isMeal){%>
+                                
+                                <td class="<%=`${dayOfWeek} ${currTime} meal`%>" bgcolor='#ADD8E6' data-dbid=<%=mealID%>><%=putName%></td>
+                            <%} else{%>
+                                <td class="<%=`${dayOfWeek} ${currTime}`%>"></td>
+                            <%}%>
+                        <%})%>
+                        
+                    <%}else{%>
+                        <%if(k){%>
+                            <td ><%=`${j}:${k*15}AM`%></td>
+                        <%}else{ %>
+                            <td ><%=`${j}:00 AM`%></td>
+                        <%}%>
+                        <%daysEnum.forEach(function(dayOfWeek){ %>
+                            <%let currTime%>
+                            <%if(!k){currTime = `${j}00`}else{currTime = `${j}${k*15}`}%>
+                            <%let isMeal = false%>
+                            <%let putName = ''%>
+                            <%let mealID = ''%>
+                            <%meals.forEach(function(meal){%>
+                                <%meal.days.forEach(function(day){%>
+                                    
+                                    
+                                    <%if(currTime >= meal.startTime && currTime <= meal.endTime && day === dayOfWeek){%>
+                                        <%isMeal = true%>
+                                        <%mealID = meal._id%>
+                                        <%if(currTime===meal.startTime){putName = meal.event}%>
+                                    <%}%>
+                                <%})%>
+                            <%})%>
+                            <%if(isMeal){%>
+                                <td class="<%=`${dayOfWeek} ${currTime} meal`%>" bgcolor='#ADD8E6' data-dbid=<%=mealID%>><%=putName%></td>
+                            <%} else{%>
+                                <td class="<%=`${dayOfWeek} ${currTime}`%>"></td>
+                            <%}%>
+                            
+                        <%})%>
+                    <%}%>
+                    </tr>
+            <%}}%>
+            <!-- 12-11PM -->
+            <%for(let j = 0; j < 12; j++){%>
+                <%for(let k = 0; k < 4; k++){%>
+                <tr>
+                    <%if(!j){j=12}%>
+                    <%if(j<10){%>
+                        <%if(k){%>
+                            <td ><%=`0${j}:${k*15}PM`%></td>
+                        <%}else{ %>
+                            <td ><%=`0${j}:00PM`%></td>
+                        <%}%>
+                    <%}else{%>
+                        <%if(k){%>
+                            <td ><%=`${j}:${k*15}PM`%></td>
+                        <%}else{ %>
+                            <td ><%=`${j}:00 PM`%></td>
+                        <%}%>
+                    <%}%>
+                    <%if(j===12){j=0}%>
+                    <%daysEnum.forEach(function(dayOfWeek){ %>
+                        <%let currTime%>
+                            <%if(!k){currTime = `${j+12}00`}else{currTime = `${j+12}${k*15}`}%>
+                            <%let isMeal = false%>
+                            <%let putName = ''%>
+                            <%let mealID = ''%>
+                            <%meals.forEach(function(meal){%>
+                                <%meal.days.forEach(function(day){%>
+                                    
+                                    
+                                    <%if(currTime >= meal.startTime && currTime <= meal.endTime && day === dayOfWeek){%>
+                                        <%isMeal = true%>
+                                        <%mealID = meal._id%>
+                                        <%if(currTime===meal.startTime){putName = meal.event}%>
+                                    <%}%>
+                                <%})%>
+                            <%})%>
+                            <%if(isMeal){%>
+                                <td class="<%=`${dayOfWeek} ${currTime} meal`%>" bgcolor='#ADD8E6' data-dbid=<%=mealID%>><%=putName%></td>
+                            <%} else{%>
+                                <td class="<%=`${dayOfWeek} ${currTime}`%>"></td>
+                            <%}%>
+                    <%})%>
+                </tr>
+            <%}}%>
+            <!-- 12-5AM -->
+            <%for(let j = 0; j < 6; j++){%>
+                <%for(let k = 0; k < 4; k++){%>
+                    <tr>
+                    <%if(!j){j=12}%>
+                    <%if(j<10){%>
+                    
+                        <%if(k){%>
+                            <td ><%=`0${j}:${k*15}AM`%></td>
+                        <%}else{ %>
+                            <td ><%=`0${j}:00 AM`%></td>
+                        <%}%>
+                        <%daysEnum.forEach(function(dayOfWeek){ %>
+
+                            <%let currTime%>
+                            <%if(!k){if(!j){currTime = `0000`}else{currTime = `0${j}00`}}else{if(!j){currTime = `00${k*15}`}else{currTime = `0${j}${k*15}`}}%>
+                            <%let isMeal = false%>
+                            <%let putName = ''%>
+                            <%let mealID = ''%>
+                            <%meals.forEach(function(meal){%>
+                                <%meal.days.forEach(function(day){%>
+                                    
+                                    
+                                    <%if(currTime >= meal.startTime && currTime <= meal.endTime && day === dayOfWeek){%>
+                                        <%isMeal = true%>
+                                        <%mealID = meal._id%>
+                                        <%if(currTime===meal.startTime){putName = meal.event}%>
+                                    <%}%>
+                                <%})%>
+                            <%})%>
+                            <%if(isMeal){%>
+                                
+                                <td class="<%=`${dayOfWeek} ${currTime} meal`%>" bgcolor='#ADD8E6' data-dbid=<%=mealID%>><%=putName%></td>
+                            <%} else{%>
+                                <td class="<%=`${dayOfWeek} ${currTime}`%>"></td>
+                            <%}%>
+                            
+                        <%})%>
+                    <%}else{%>
+                        <%if(k){%>
+                            <td ><%=`${j}:${k*15}AM`%></td>
+                        <%}else{ %>
+                            <td ><%=`${j}:00 AM`%></td>
+                        <%}%>
+                        <%daysEnum.forEach(function(dayOfWeek){ %>
+                            <%let currTime%>
+                            <%if(!k){if(j===12){currTime = `0000`}else{currTime = `${j}00`}}else{if(j===12){currTime = `00${k*15}`}else{currTime = `${j}${k*15}`}}%>
+                            <%let isMeal = false%>
+                            <%let putName = ''%>
+                            <%let mealID = ''%>
+                            <%meals.forEach(function(meal){%>
+                                <%meal.days.forEach(function(day){%>
+                                    
+                                    
+                                    <%if(currTime >= meal.startTime && currTime <= meal.endTime && day === dayOfWeek){%>
+                                        <%isMeal = true%>
+                                        <%mealID = meal._id%>
+                                        <%if(currTime===meal.startTime){putName = meal.event}%>
+                                    <%}%>
+                                <%})%>
+                            <%})%>
+                            <%if(isMeal){%>
+                                
+                                <td class="<%=`${dayOfWeek} ${currTime} meal`%>" bgcolor='#ADD8E6' data-dbid=<%=mealID%>><%=putName%></td>
+                            <%} else{%>
+                                <td class="<%=`${dayOfWeek} ${currTime}`%>"></td>
+                            <%}%>
+                            
+                        <%})%>
+                    <%}%>
+                    <%if(j===12){j=0}%>
+                    </tr>
+            <%}}%>
                     
         </tbody>
     </table>
 
 </div>
+<div><em>click on an event for more info</em></div>
+<br><br>
 <a href="/mealplans">Back to Meal Plans</a>
+<br>
+
+
+
 <script>
 const modal = document.querySelector(".modal");
+const mealinfoEl = document.querySelector(".mealinfo");
 const trigger = document.querySelector(".trigger");
 const closeButton = document.querySelector(".close-button");
+const closeMenu = document.querySelector(".close-menu");
+const mealdisplayEL = document.querySelector('#mealdisplay')
 
 function toggleModal() {
     modal.classList.toggle("show-modal");
 }
+function toggleMealMenu() {
+    mealinfoEl.classList.toggle("show-modal");
+
+}
+
 
 function windowOnClick(event) {
     if (event.target === modal) {
         toggleModal();
     }
 }
-
+function setMealInfo(evt){
+    let idString = evt.target.getAttribute('data-dbid')
+    mealdisplayEL.innerHTML = `<a href="/meals/${idString}">Click to view and edit this meal</a>`
+}
 trigger.addEventListener("click", toggleModal);
 closeButton.addEventListener("click", toggleModal);
+closeMenu.addEventListener("click", toggleMealMenu);
 window.addEventListener("click", windowOnClick);
+
+const mealArr = document.querySelectorAll('.meal')
+mealArr.forEach(function(el){
+    el.addEventListener('click', toggleMealMenu)
+    el.addEventListener('click', setMealInfo)
+    
+})
 
 
 </script>

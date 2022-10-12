@@ -4,12 +4,23 @@ const Meal = require('../models/meal')
 module.exports = {
     index,
     show,
-    create
+    create,
+    delete: deleteMealPlan
   };
 
+  function deleteMealPlan(req, res, next){
+    MealPlan.deleteOne({_id: req.params.id}, function(err) {
+        // one way to handle errors
+        if (err){
+            return res.redirect('/mealplans');
+        } else {
+            res.redirect('/mealplans');
+        }
+      })
+}
 
 function index(req, res) {
-    MealPlan.find({}, function(err, mealplans) {
+    MealPlan.find({user: req.user._id}, function(err, mealplans) {
 
       res.render('mealplans', { title: 'Meal Plans', mealplans });
     });

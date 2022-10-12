@@ -1,0 +1,262 @@
+<%- include('../partials/header') %> 
+<button class="trigger">Edit This Meal</button><br>
+<div class="modal">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <form action="/mealplans/<%=`${meals._id}`%>/meals/edit" method="POST">
+            <br>
+            <label>Event:
+                <div class="event" >
+                    <textarea class="eventph" rows="5" 
+                    placeholder="brunch, dinner, snack, etc" name="event"
+                    ><%=meals.event%></textarea>
+               </div> 
+               <br><br>
+            </label>
+            <label>Start Time:
+                <select name="startHour">
+                    <%for(let j = 1; j < 13; j++){%>
+                        <%if(meals.startTime >= 1200){%>
+                            <%if(j<10){%>
+                                <%if(meals.startTime.slice(0,2)-12==`${j}`){%>
+                                    <option value="<%=`0${j}`%>" selected><%=`0${j}`%></option>
+                                <%} else{%>
+                                    <option value="<%=`0${j}`%>"><%=`0${j}`%></option>
+                                <%}%>
+                            <%} else {%>
+                                <%if(meals.startTime.slice(0,2)-12==`${j}`){%>
+                                    <option value="<%=`${j}`%>" selected><%=`${j}`%></option>
+                                <%} else{%>
+                                    <option value="<%=`${j}`%>"><%=`${j}`%></option>
+                                <%}%>                  
+                            <%} %>
+                        <%} else {%>
+                            <%if(j<10){%>
+                                <%if(meals.startTime.slice(0,2)==`${j}`){%>
+                                    <option value="<%=`0${j}`%>" selected><%=`0${j}`%></option>
+                                <%} else{%>
+                                    <option value="<%=`0${j}`%>"><%=`0${j}`%></option>
+                                <%}%>
+                            <%} else {%>
+                                <%if(meals.startTime.slice(0,2)==`${j}`){%>
+                                    <option value="<%=`${j}`%>" selected><%=`${j}`%></option>
+                                <%} else{%>
+                                    <option value="<%=`${j}`%>"><%=`${j}`%></option>
+                                <%}%>                  
+                            <%} %>
+                        <%}%>
+                        
+                        
+                    <%}%>
+                 </select>  
+                 :
+                 <select name="startMin">
+                    <%for(let i = 0; i < 4; i++){%>
+                        <%if(i===0){%>
+                            <%if(meals.startTime.slice(2)=='00'){%>
+                                <option value="00" selected>00</option>
+                            <%} else {%>
+                                <option value="00">00</option>
+                            <%}%>
+                        <%} else {%>
+                            <%if(meals.startTime.slice(2)==`${i*15}`){%>
+                                <option value="<%=`${i*15}`%>" selected><%=`${i*15}`%></option>      
+                            <%} else {%>
+                                <option value="<%=`${i*15}`%>"><%=`${i*15}`%></option>      
+                            <%}%>                
+                        <%} %>
+                        
+                    <%}%>
+                 </select>    
+                 <select name="startAMPM">
+                    <option value="AM">AM</option>
+                    <%if(meals.startTime>=12){%>
+                        <option value="PM" selected>PM</option>
+                    <%}else{%>
+                        <option value="PM">PM</option>
+                    <%}%>
+                 </select>   
+            </label><br>
+            <label>End Time:
+                <select name="endHour">
+                    <%for(let j = 1; j < 13; j++){%>
+                        <%if(meals.endTime >= 1200){%>
+                            <%if(j<10){%>
+                                <%if(meals.endTime.slice(0,2)-12==`${j}`){%>
+                                    <option value="<%=`0${j}`%>" selected><%=`0${j}`%></option>
+                                <%} else{%>
+                                    <option value="<%=`0${j}`%>"><%=`0${j}`%></option>
+                                <%}%>
+                            <%} else {%>
+                                <%if(meals.endTime.slice(0,2)-12==`${j}`){%>
+                                    <option value="<%=`${j}`%>" selected><%=`${j}`%></option>
+                                <%} else{%>
+                                    <option value="<%=`${j}`%>"><%=`${j}`%></option>
+                                <%}%>                  
+                            <%} %>
+                        <%} else {%>
+                            <%if(j<10){%>
+                                <%if(meals.endTime.slice(0,2)==`${j}`){%>
+                                    <option value="<%=`0${j}`%>" selected><%=`0${j}`%></option>
+                                <%} else{%>
+                                    <option value="<%=`0${j}`%>"><%=`0${j}`%></option>
+                                <%}%>
+                            <%} else {%>
+                                <%if(meals.endTime.slice(0,2)==`${j}`){%>
+                                    <option value="<%=`${j}`%>" selected><%=`${j}`%></option>
+                                <%} else{%>
+                                    <option value="<%=`${j}`%>"><%=`${j}`%></option>
+                                <%}%>                  
+                            <%} %>
+                        <%}%>
+                        
+                    <%}%>
+                 </select>  
+                 :
+                 <select name="endMin">
+                    <%for(let i = 0; i < 4; i++){%>
+                        <%if(i===0){%>
+                            <%if(meals.endTime.slice(2)=='00'){%>
+                                <option value="00" selected>00</option>
+                            <%} else {%>
+                                <option value="00">00</option>
+                            <%}%>
+                        <%} else {%>
+                            <%if(meals.endTime.slice(2)==`${i*15}`){%>
+                                <option value="<%=`${i*15}`%>" selected><%=`${i*15}`%></option>      
+                            <%} else {%>
+                                <option value="<%=`${i*15}`%>"><%=`${i*15}`%></option>      
+                            <%}%>                
+                        <%} %>
+                        
+                    <%}%>
+                 </select>    
+                 <select name="endAMPM">
+                    <option value="AM">AM</option>
+                    <%if(meals.endTime>=12){%>
+                        <option value="PM" selected>PM</option>
+                    <%}else{%>
+                        <option value="PM">PM</option>
+                    <%}%>
+                 </select>   
+            </label><br><br>
+            <label>Description:
+                <div class="description" >
+                    <textarea class="descriptionph" rows="5" 
+                    placeholder="Ex: Just a snack&#x1f608; Salad for Lunch
+                    &#x1f60e; &#10;or leave me empty :)" name="description"><%=meals.description%></textarea>
+               </div>  <br><br><br><br>
+            </label>
+            <label>Days of the Week:
+                <br>
+                <%if(meals.days.includes('Sunday')){ %>
+                    <input type="checkbox" name="Sunday" value="Sunday" checked>
+                <%}else{%>
+                 <input type="checkbox" name="Sunday" value="Sunday">
+                <%}%>Su
+                <%if(meals.days.includes('Monday')){ %>
+                    <input type="checkbox" name="Monday" value="Monday" checked>
+                <%}else{%>
+                 <input type="checkbox" name="Monday" value="Monday">
+                <%}%>M
+
+                <%if(meals.days.includes('Tuesday')){ %>
+                    <input type="checkbox" name="Tuesday" value="Tuesday" checked>
+                <%}else{%>
+                 <input type="checkbox" name="Tuesday" value="Tuesday">
+                <%}%>T
+
+                <%if(meals.days.includes('Wednesday')){ %>
+                    <input type="checkbox" name="Wednesday" value="Wednesday" checked>
+                <%}else{%>
+                 <input type="checkbox" name="Wednesday" value="Wednesday">
+                <%}%>W
+
+                <%if(meals.days.includes('Thursday')){ %>
+                    <input type="checkbox" name="Thursday" value="Thursday" checked>
+                <%}else{%>
+                 <input type="checkbox" name="Thursday" value="Thursday">
+                <%}%>Th
+
+                <%if(meals.days.includes('Friday')){ %>
+                    <input type="checkbox" name="Friday" value="Friday" checked>
+                <%}else{%>
+                 <input type="checkbox" name="Friday" value="Friday">
+                <%}%>F
+                <%if(meals.days.includes('Saturday')){ %>
+                    <input type="checkbox" name="Saturday" value="Saturday" checked>
+                <%}else{%>
+                 <input type="checkbox" name="Saturday" value="Saturday">
+                <%}%>Sa
+                
+                 </label>
+            <input type="submit" value="Update Meal">
+        </form>
+        <form action="/meals/<%= meals._id %>?_method=DELETE" method="POST">
+            <button style='color: red;' type="submit">Delete Meal</button>
+          </form>
+        
+    </div>
+</div>
+<h1><%=meals.event%></h1>
+<br><br>
+<%if(meals.startTime >= 1200){%>
+    <h3>Start Time: <%=meals.startTime.slice(0,2)-12 + ':' + meals.startTime.slice(2) + ' PM'%></h3>
+<%} else {%>
+    <h3>StartTime: <%=meals.startTime.slice(0,2) + ':' + meals.startTime.slice(2) + ' AM'%></h3>
+<%}%>
+
+<%if(meals.endTime >= 1200){%>
+    <h3>End Time: <%=meals.endTime.slice(0,2)-12 + ':' + meals.endTime.slice(2) + ' PM'%></h3>
+<%} else {%>
+    <h3>End Time: <%=meals.endTime.slice(0,2) + ':' + meals.endTime.slice(2) + ' AM'%></h3>
+
+<%}%>
+<h3>Description:</h3>
+<p><%=meals.description%></p>
+
+<br><br>
+<a href="/mealplans/<%=meals.mealPlan%>">Return to Meal</a>
+<br><br>
+
+<script>
+    const modal = document.querySelector(".modal");
+    const mealinfoEl = document.querySelector(".mealinfo");
+    const trigger = document.querySelector(".trigger");
+    const closeButton = document.querySelector(".close-button");
+    const closeMenu = document.querySelector(".close-menu");
+    const mealdisplayEL = document.querySelector('#mealdisplay')
+    
+    function toggleModal() {
+        modal.classList.toggle("show-modal");
+    }
+    function toggleMealMenu() {
+        mealinfoEl.classList.toggle("show-modal");
+    
+    }
+    
+    
+    function windowOnClick(event) {
+        if (event.target === modal) {
+            toggleModal();
+        }
+    }
+    function setMealInfo(evt){
+        let idString = evt.target.getAttribute('data-dbid')
+        mealdisplayEL.innerHTML = `<a href="/meals/${idString}">Click to view and edit this meal</a>`
+    }
+    trigger.addEventListener("click", toggleModal);
+    closeButton.addEventListener("click", toggleModal);
+    closeMenu.addEventListener("click", toggleMealMenu);
+    window.addEventListener("click", windowOnClick);
+    
+    const mealArr = document.querySelectorAll('.meal')
+    mealArr.forEach(function(el){
+        el.addEventListener('click', toggleMealMenu)
+        el.addEventListener('click', setMealInfo)
+        
+    })
+    
+    
+    </script>
+<%- include('../partials/footer') %> 
