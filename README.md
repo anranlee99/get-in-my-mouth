@@ -5,6 +5,8 @@
 ## About
 Get in my Mouth is a meal Planner that you can use for scheduling your weekly meals. 
 
+The site can be found <a href="https://get-in-my-mouth.onrender.com">here</a>
+
 ## Screenshots:
 <figure>
   <figcaption><strong>A Meal Plan</strong></figcaption>
