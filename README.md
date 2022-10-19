@@ -7,6 +7,7 @@ Get in my Mouth is a meal Planner that you can use for scheduling your weekly me
 
 The site can be found <a href="https://get-in-my-mouth.onrender.com">here</a>
 
+Planning material can be found <a href="https://trello.com/invite/b/iAZhBg5z/ATTIb5ecd5845b76e51cc0b0d32721edc67e010F869E/ga-project-2">here</a>
 ## Screenshots:
 <figure>
   <figcaption><strong>A Meal Plan</strong></figcaption>
